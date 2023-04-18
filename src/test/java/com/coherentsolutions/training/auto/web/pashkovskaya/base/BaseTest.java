@@ -5,21 +5,23 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import com.coherentsolutions.training.auto.web.pashkovskaya.util.DriverInit;
 import com.coherentsolutions.training.auto.web.pashkovskaya.util.PageDriver;
+import org.testng.annotations.Parameters;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 public class BaseTest {
     private WebDriver driver;
 
+    @Parameters({"browser"})
     @BeforeMethod
-    public void setUp () throws MalformedURLException {
+    public void setUp (String browserName) throws IOException {
         DriverInit instanseDriver = DriverInit.getInstance();
-        driver = instanseDriver.openRemoteWebDriver("chrome");
+        driver = instanseDriver.openDriverInSauceLabs(browserName);
 
         PageDriver.setDriver(driver);
     }
 
-    @AfterMethod
+    @AfterMethod (alwaysRun = true)
     public void cleanUp() {
         driver.quit();
     }
